@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import Any
 
 
@@ -26,7 +26,8 @@ def conditional_caster(condition: Callable[[Any], Any],
 
 def spell_sequence(
         spells:
-        list[Callable[[Any, Any], Any]]) -> Callable[[Any, Any], list[Any]]:
+        Sequence[Callable[[Any,
+                           Any], Any]]) -> Callable[[Any, Any], list[Any]]:
     return lambda target, power: [spell(target, power) for spell in spells]
 
 
@@ -53,7 +54,7 @@ def test_combiner() -> None:
     for i in combo:
         msg = i.split(" for")
         finall.append(msg[0])
-    print(f"{finall[0]}, {finall[1]}")
+    print(f"Combined spell Result: {finall[0]}, {finall[1]}")
 
 
 def test_amplifier() -> None:

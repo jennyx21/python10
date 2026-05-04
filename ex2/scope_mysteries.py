@@ -2,17 +2,17 @@ from collections.abc import Callable
 from typing import Any
 
 
-def mage_counter() -> Callable:
-    count = 0 
+def mage_counter() -> Callable[[], int]:
+    count = 0
 
     def counter() -> int:
-        nonlocal count 
+        nonlocal count
         count += 1
         return count
     return counter
 
 
-def spell_accumulator(initial_power: int) -> Callable:
+def spell_accumulator(initial_power: int) -> Callable[[int], int]:
 
     def accumulation(add: int) -> int:
         nonlocal initial_power
@@ -21,28 +21,26 @@ def spell_accumulator(initial_power: int) -> Callable:
     return accumulation
 
 
-def enchantment_factory(enchantment_type: str) -> Callable:
-    def item(item: str):
-        nonlocal enchantment_type
+def enchantment_factory(enchantment_type: str) -> Callable[[str], str]:
+    def item(item: str) -> str:
         return f"{enchantment_type} {item}"
     return item
 
 
-def memory_vault() -> dict[str, Callable]:
-    stored = {}
-    def store(key: str, value: Any):
-        nonlocal stored
+def memory_vault() -> dict[str, Callable[..., Any]]:
+    stored: dict[str, Any] = {}
+
+    def store(key: str, value: Any) -> str:
         stored[key] = value
         return f"'{key}' = {value}"
-    
-    def recall(key: str):
-        nonlocal stored
+
+    def recall(key: str) -> str:
         return f"'{key}': {stored.get(key, 'Memory not found')}"
     return {"stored": store, "recall": recall}
 
-        
+
 def counter_test() -> None:
-    print("Testing mage counter...")
+    print("\nTesting mage counter...")
     count = mage_counter()
     print(f"counter1: {count()}")
     print(f"counter1: {count()}")
@@ -54,16 +52,16 @@ def counter_test() -> None:
     print(f"counter1: {count()}")
 
 
-def test_accumulator():
-    print("Testing spell accumulator...")
+def test_accumulator() -> None:
+    print("\nTesting spell accumulator...")
     accumulate = spell_accumulator(45)
     print(f"start: {accumulate(0)}")
     print(f"add 10: {accumulate(10)}")
     print(f"add another 12: {accumulate(12)}")
 
 
-def test_enchantment():
-    print("Testing enchantmant factory...")
+def test_enchantment() -> None:
+    print("\nTesting enchantmant factory...")
     enchant1 = enchantment_factory("Glorious")
     enchant2 = enchantment_factory("Frozwn")
     enchant3 = enchantment_factory("Flaming")
@@ -72,15 +70,15 @@ def test_enchantment():
     print(enchant3("knife"))
 
 
-def test_memory():
-   print("Testing memory")
-   memory = memory_vault()
-   print(f"Store {memory['stored']('secret', 42)}")
-   print(f"Recall {memory['recall']('secret')}")
-   print(f"Recall {memory['recall']('Unknown')}")
+def test_memory() -> None:
+    print("\nTesting memory")
+    memory = memory_vault()
+    print(f"Store {memory['stored']('secret', 42)}")
+    print(f"Recall {memory['recall']('secret')}")
+    print(f"Recall {memory['recall']('Unknown')}")
 
 
-def main():
+def main() -> None:
     counter_test()
     test_accumulator()
     test_enchantment()
