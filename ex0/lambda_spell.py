@@ -1,21 +1,42 @@
-artifacts = [{'name': 'Wind Cloak', 'power': 67, 'type': 'relic'}, {'name': 'Storm Crown', 'power': 116, 'type': 'weapon'}, {'name': 'Crystal Orb', 'power': 120, 'type': 'armor'}, {'name': 'Light Prism', 'power': 81, 'type': 'accessory'}]
-mages = [{'name': 'Storm', 'power': 83, 'element': 'wind'}, {'name': 'Riley', 'power': 69, 'element': 'light'}, {'name': 'Riley', 'power': 100, 'element': 'water'}, {'name': 'Kai', 'power': 86, 'element': 'water'}, {'name': 'Phoenix', 'power': 72, 'element': 'ice'}]
-spells = ['freeze', 'darkness', 'lightning', 'earthquake']
+from typing import Any
+artifacts = [
+    {'name': 'Wind Cloak', 'power': 67, 'type': 'relic'},
+    {'name': 'Storm Crown', 'power': 116, 'type': 'weapon'},
+    {'name': 'Crystal Orb', 'power': 120, 'type': 'armor'},
+    {'name': 'Light Prism', 'power': 81, 'type': 'accessory'}
+    ]
+mages = [
+    {'name': 'Storm', 'power': 83, 'element': 'wind'},
+    {'name': 'Riley', 'power': 69, 'element': 'light'},
+    {'name': 'Riley', 'power': 100, 'element': 'water'},
+    {'name': 'Kai', 'power': 86, 'element': 'water'},
+    {'name': 'Phoenix', 'power': 72, 'element': 'ice'}
+    ]
+spells = [
+    'freeze',
+    'darkness',
+    'lightning',
+    'earthquake'
+    ]
 
 
-def artifact_sorter(artifacts: list[dict]):
+def artifact_sorter(artifacts: list[dict[str, Any]]) -> list[dict[str, Any]]:
     sort = sorted(artifacts, key=lambda p: p['power'], reverse=True)
     return sort
 
-def power_filter(mages : list[dict], min_power: int):
+
+def power_filter(mages: list[dict[str, Any]],
+                 min_power: int) -> list[dict[str, Any]]:
     minpow = list(filter(lambda m: m['power'] >= min_power, mages))
     return minpow
 
-def spell_transformer(spells: list[str]):
+
+def spell_transformer(spells: list[str]) -> list[str]:
     spell = list(map(lambda x: '* ' + x + ' *', spells))
     return spell
 
-def mage_stats(mages: list[dict]):
+
+def mage_stats(mages: list[dict[str, Any]]) -> dict[str, Any]:
     max_mage = max(mages, key=lambda x: x['power'], )['power']
     min_mage = min(mages, key=lambda x: x['power'], )['power']
     av_mage = round(sum(m['power'] for m in mages) / len(mages), 2)
@@ -25,7 +46,8 @@ def mage_stats(mages: list[dict]):
         'average_power': av_mage
             }
 
-def test_sorter():
+
+def test_sorter() -> None:
     print("\ntesting artifact sorter...")
     sorted_dict = artifact_sorter(artifacts)
     i = 0
@@ -36,10 +58,10 @@ def test_sorter():
                     name = value
                 if key == "power":
                     power = value
-            print(f"{name} ({power}) comes befor, ", end= "")
+            print(f"{name} ({power}) comes befor, ", end="")
             break
         i += 1
-    last = sorted_dict[len(sorted_dict) -1]
+    last = sorted_dict[len(sorted_dict) - 1]
     for key, value in last.items():
         if key == "name":
             name = value
@@ -48,10 +70,10 @@ def test_sorter():
     print(f"{name} ({power})")
 
 
-def test_filter():
+def test_filter() -> None:
     print("\ntesting power filter...")
     filtered_dict = power_filter(mages, 80)
-    print("still in the list:", end= "")
+    print("still in the list:", end="")
     for element in filtered_dict:
         for key, value in element.items():
             if key == "name":
@@ -64,7 +86,7 @@ def test_filter():
     print()
 
 
-def test_transformer():
+def test_transformer() -> None:
     print("\ntesting spell transformer...")
     transformed_str = spell_transformer(spells)
     for spell in transformed_str:
@@ -72,7 +94,7 @@ def test_transformer():
     print()
 
 
-def test_stats():
+def test_stats() -> None:
     print("\ntesting mage stats... ")
     stats = mage_stats(mages)
     for key, value in stats.items():
@@ -85,12 +107,13 @@ def test_stats():
     print(f"max Power: {max_p}, Min Power: {min_p}, Average Power: {av_p}")
 
 
-def main():
+def main() -> None:
     test_sorter()
     test_filter()
     test_transformer()
     test_stats()
     print()
+
 
 if __name__ == "__main__":
     main()
